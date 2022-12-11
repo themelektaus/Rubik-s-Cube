@@ -120,7 +120,7 @@ namespace Tausi.RubiksCube
             transform.localScale = Vector3.one * (1f / size);
         }
 
-        public bool TryShuffle(int seed = -1381026794)
+        public bool TryShuffle(int seed = 0)
         {
             if (isBusy)
                 return false;
