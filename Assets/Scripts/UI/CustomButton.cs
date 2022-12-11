@@ -13,7 +13,7 @@ namespace Tausi.RubiksCube
 
         void Awake()
         {
-            alpha = .4f;
+            alpha = .75f;
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -23,7 +23,7 @@ namespace Tausi.RubiksCube
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            alpha = .8f;
+            alpha = 1;
         }
 
         public void OnPointerClick(PointerEventData eventData)

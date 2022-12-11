@@ -92,8 +92,10 @@ namespace Tausi.RubiksCube
 
         void UpdateUI()
         {
-            if (!ui) return;
-            var r = canvasScaler ? canvasScaler.referenceResolution : new(Screen.width, Screen.height);
+            if (!ui)
+                return;
+
+            var r = canvasScaler.referenceResolution;
             var v = Camera.main.WorldToViewportPoint(transform.position);
             var s = transform.localScale.x;
             ui.anchoredPosition = new Vector2(r.x * v.x, r.y * v.y);
