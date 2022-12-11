@@ -13,7 +13,7 @@ namespace Tausi.RubiksCube
 
         void Awake()
         {
-            buttonAlpha = .75f;
+            buttonAlpha = .7f;
             infoAlpha = 0;
         }
 
@@ -25,7 +25,7 @@ namespace Tausi.RubiksCube
         public void OnPointerEnter(PointerEventData eventData)
         {
             buttonAlpha = 1;
-            infoAlpha = 1;
+            infoAlpha = .95f;
         }
 
         void Update()
