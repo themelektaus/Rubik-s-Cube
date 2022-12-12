@@ -10,6 +10,11 @@ namespace Tausi.RubiksCube
         [SerializeField] int targetFrameRate = -1;
 #pragma warning restore CS0414
 
+        public void Toggle()
+        {
+            enabled = !enabled;
+        }
+
 #if UNITY_EDITOR
         void OnEnable()
         {
@@ -17,12 +22,20 @@ namespace Tausi.RubiksCube
                 UnityEditor.PlayerSettings.useFlipModelSwapchain = false;
         }
 #else
+        Color originalBackgroundColor;
+
         System.IntPtr hWnd;
 
         readonly GameObject[] windows = new GameObject[50];
 
         void Awake()
         {
+            originalBackgroundColor = Camera.main.backgroundColor;
+
+            hWnd = WindowsAPI.GetActiveWindow();
+            WindowsAPI.ExtendFrameIntoClientArea(hWnd);
+            WindowsAPI.SetTopMost(hWnd);
+
             for (int i = 0; i < windows.Length; i++)
             {
                 var window = new GameObject();
@@ -40,29 +53,28 @@ namespace Tausi.RubiksCube
             }
         }
 
-        void Start()
-        {
-            hWnd = WindowsAPI.GetActiveWindow();
-            WindowsAPI.ExtendFrameIntoClientArea(hWnd);
-            WindowsAPI.SetTopMost(hWnd);
-            WindowsAPI.SetTransparent(hWnd, noActivate, clickThrough: true);
-            Camera.main.backgroundColor = new();
-            Camera.main.clearFlags = CameraClearFlags.SolidColor;
-        }
-
         void Update()
         {
-            WindowsAPI.SetTransparent(hWnd, noActivate, clickThrough: !Utils.RaycastHover(out _) && !Utils.RaycastHoverUI(out _));
+            var hoverAnything = Utils.RaycastHover(Utils.baseLayerMask) || Utils.RaycastHoverUI();
+            WindowsAPI.SetTransparent(hWnd, noActivate, clickThrough: !hoverAnything);
         }
 
         void OnEnable()
         {
             Application.targetFrameRate = targetFrameRate > 0 ? targetFrameRate : -1;
+
+            WindowsAPI.SetTransparent(hWnd, noActivate, clickThrough: true);
+            Camera.main.backgroundColor = new();
+            Camera.main.clearFlags = CameraClearFlags.SolidColor;
         }
 
         void OnDisable()
         {
             Application.targetFrameRate = -1;
+
+            WindowsAPI.SetTransparent(hWnd, noActivate, clickThrough: false);
+            Camera.main.backgroundColor = originalBackgroundColor;
+            Camera.main.clearFlags = CameraClearFlags.Skybox;
         }
 
 #endif

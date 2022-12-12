@@ -37,7 +37,7 @@ namespace Tausi.RubiksCube
         {
             UpdateUI();
 
-            if (Utils.RaycastHover(out _))
+            if (Utils.RaycastHover(Utils.baseLayerMask))
             {
                 var mouseWheel = Input.mouseScrollDelta.y;
                 if (mouseWheel != 0)
