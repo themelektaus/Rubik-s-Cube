@@ -10,42 +10,32 @@ namespace Tausi.RubiksCube
         [SerializeField] UnityEvent onClick;
 
         float originalAlpha;
-        float alpha;
+        SmoothCanvasGroup smoothCanvasGroup;
 
-        void Awake()
+        protected virtual void Awake()
         {
             originalAlpha = button.alpha;
-            FadeOut();
+            smoothCanvasGroup = button;
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public virtual void OnPointerExit(PointerEventData eventData)
         {
-            FadeOut();
+            smoothCanvasGroup.targetAlpha = originalAlpha;
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public virtual void OnPointerEnter(PointerEventData eventData)
         {
-            FadeIn();
+            smoothCanvasGroup.targetAlpha = 1;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public virtual void OnPointerClick(PointerEventData eventData)
         {
             onClick.Invoke();
         }
-        
-        void FadeOut()
-        {
-            alpha = originalAlpha;
-        }
-        
-        void FadeIn()
-        {
-            alpha = 1;
-        }
 
-        void Update()
+        protected virtual void Update()
         {
-            button.SetAlpha(alpha, speed: 10);
+            smoothCanvasGroup.Update(.1f);
         }
     }
 }

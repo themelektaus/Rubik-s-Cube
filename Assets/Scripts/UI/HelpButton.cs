@@ -3,35 +3,34 @@ using UnityEngine.EventSystems;
 
 namespace Tausi.RubiksCube
 {
-    public class HelpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class HelpButton : CustomButton
     {
-        [SerializeField] CanvasGroup button;
         [SerializeField] CanvasGroup info;
 
-        float buttonAlpha;
-        float infoAlpha;
+        SmoothCanvasGroup infoCanvasGroup;
 
-        void Awake()
+        protected override void Awake()
         {
-            buttonAlpha = .7f;
-            infoAlpha = 0;
+            base.Awake();
+            infoCanvasGroup = info;
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public override void OnPointerExit(PointerEventData eventData)
         {
-            Awake();
+            base.OnPointerExit(eventData);
+            infoCanvasGroup.targetAlpha = 0;
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
+        public override void OnPointerEnter(PointerEventData eventData)
         {
-            buttonAlpha = 1;
-            infoAlpha = .95f;
+            base.OnPointerEnter(eventData);
+            infoCanvasGroup.targetAlpha = .95f;
         }
 
-        void Update()
+        protected override void Update()
         {
-            button.SetAlpha(buttonAlpha, speed: 10);
-            info.SetAlpha(infoAlpha, speed: 10);
+            base.Update();
+            infoCanvasGroup.Update(.1f);
         }
     }
 }
